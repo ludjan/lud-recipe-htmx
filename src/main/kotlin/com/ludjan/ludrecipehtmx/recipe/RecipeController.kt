@@ -3,6 +3,7 @@ package com.ludjan.ludrecipehtmx.recipe
 import com.ludjan.ludrecipehtmx.RendererService
 import com.ludjan.ludrecipehtmx.html.*
 import org.springframework.http.ResponseEntity
+import org.springframework.util.MultiValueMap
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -43,14 +44,13 @@ class RecipeController(
     @PostMapping("/$EDIT/{recipeId}")
     fun updateRecipe(
         @PathVariable("recipeId") recipeId: Int,
-        @RequestBody body: String,
+        @RequestBody requestBody: MultiValueMap<String, String>,
     ): ResponseEntity<*> {
-        val params = body.split("&")
-        val name = params.find { it.startsWith("name") }?.split("=")?.last()
+        val name: String = requestBody["name"]?.first() ?: "horse"
 
         name?.let {
             println("About to update name for $recipeId to $name")
-            recipeService.updateRecipe(recipeId, name)
+            recipeService.updateRecipe(recipeId, it)
         }
 
         return ResponseEntity.ok(LDiv(rendererService.recipeSection()).render())
@@ -59,13 +59,12 @@ class RecipeController(
     @GetMapping("$EDIT/{recipeId}")
     fun getPopulatedRecipeForm(
         @PathVariable("recipeId") recipeId: Int
-    ) =
-        recipeService.getRecipes()
+    ) = recipeService.getRecipes()
             .find { it.id == recipeId }
             ?.let { recipe: RecipeEntity ->
                 println("Found recipe which has name ${recipe.name}")
-                ResponseEntity.ok(RecipeComponents.editForm(recipeId, recipe.name).render())
-            } ?: println("Something went wrong")
+                ResponseEntity.ok(RecipeComponents.editForm(recipe).render())
+            }
 
 
     companion object {

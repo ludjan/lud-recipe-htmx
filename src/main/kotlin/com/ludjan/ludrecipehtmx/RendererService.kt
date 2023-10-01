@@ -51,7 +51,7 @@ class RendererService (
                         "style" to "margin-bottom:5px;padding:5px;border: 1px solid black;",
                         "hx-get" to "${RecipeController.EDIT_PATH}/${recipe.id}",
                         "hx-swap" to "innerHTML",
-                        "hx-target" to "#main-content"
+                        "hx-target" to "#main-content",
                     ),
                     listOf(
                         LDiv(LText("Name: ${recipe.name}")),

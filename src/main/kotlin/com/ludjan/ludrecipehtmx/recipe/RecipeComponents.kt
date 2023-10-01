@@ -23,8 +23,7 @@ object RecipeComponents {
         )
 
     fun editForm(
-        id: Int,
-        name: String
+        recipeEntity: RecipeEntity
     ): LElement =
         LDiv(
             mapOf(
@@ -39,14 +38,13 @@ object RecipeComponents {
                         LText("<h2>Edit recipe</h2>")
                     )
                 ),
-                recipeForm("hx-post" to "${RecipeController.EDIT_PATH}/$id", name)
+                recipeForm("hx-post" to "${RecipeController.EDIT_PATH}/${recipeEntity.id}", recipeEntity)
             )
         )
 
     fun recipeForm(
         hxMethod: Pair<String, String>,
-        name: String = "",
-        // add more here
+        recipeEntity: RecipeEntity? = null
     ): LElement =
         LDiv(
             LForm(
@@ -61,9 +59,25 @@ object RecipeComponents {
                         listOf(
                             LLabel(for_attribute = "name", content = "Name"),
                             LText("<br/>"),
-                            LInput(type = "text", name = "name", id = "name", value= name),
+                            LInput(type = "text", name = "name", id = "name", value= recipeEntity?.name ?: ""),
                             LText("<br/>"),
                         )
+                    ),
+                    LDivRow(
+                        recipeEntity?.steps?.mapIndexed { index, step ->
+                            LDivRow(
+                                listOf(
+                                    LLabel(for_attribute = "step-${index+1}", content = "Step ${index + 1}"),
+                                    LText("<br/>"),
+                                    LInput(
+                                        type = "text",
+                                        name = "step-${index+1}",
+                                        id = "step-${index+1}",
+                                        value= step.description),
+                                    LText("<br/>"),
+                                )
+                            )
+                         }
                     ),
                     LDivRow(
                         LButtonSubmit("Submit")
