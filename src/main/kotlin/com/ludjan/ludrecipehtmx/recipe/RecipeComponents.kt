@@ -2,7 +2,7 @@ package com.ludjan.ludrecipehtmx.recipe
 
 import com.ludjan.ludrecipehtmx.html.*
 
-object RecipeComponents1 {
+object RecipeComponents {
 
     fun addForm(): LElement =
         LDiv(
@@ -30,7 +30,7 @@ object RecipeComponents1 {
             mapOf(
                 "id" to "edit-recipe-section",
                 "class" to "container",
-                "style" to "background-color: light-grey;"
+                "style" to "background-color: lightgrey;"
             ),
             listOf(
                 LDivRow(
@@ -48,24 +48,26 @@ object RecipeComponents1 {
         name: String = "",
         // add more here
     ): LElement =
-        LForm(
-            mapOf(
-                hxMethod,
-                "hx-params" to "*",
-                "hx-swap" to "innerHTML",
-                "hx-target" to "#main-content",
-            ),
-            listOf(
-                LDivRow(
-                    listOf(
-                        LLabel(for_attribute = "name", content = "Name"),
-                        LText("<br/>"),
-                        LInput(type = "text", name = "name", id = "name", value= name),
-                        LText("<br/>"),
-                    )
+        LDiv(
+            LForm(
+                mapOf(
+                    hxMethod,
+                    "hx-params" to "*",
+                    "hx-swap" to "innerHTML",
+                    "hx-target" to "#main-content",
                 ),
-                LDivRow(
-                    LButtonSubmit("Submit")
+                listOf(
+                    LDivRow(
+                        listOf(
+                            LLabel(for_attribute = "name", content = "Name"),
+                            LText("<br/>"),
+                            LInput(type = "text", name = "name", id = "name", value= name),
+                            LText("<br/>"),
+                        )
+                    ),
+                    LDivRow(
+                        LButtonSubmit("Submit")
+                    )
                 )
             )
         ).also { println ("Returning ${it.render()}") }

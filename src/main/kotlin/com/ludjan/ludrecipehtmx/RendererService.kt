@@ -12,7 +12,7 @@ class RendererService (
     fun recipeSection(): List<LElement> =
         listOf(
             LDiv(
-                mapOf("id" to "recipe-section", "style" to "background-color:lightcyan;"),
+                mapOf("id" to "recipe-section"),
                 listOf(
                     LDivRow(
                         LDiv(
@@ -48,7 +48,7 @@ class RendererService (
             .map { recipe ->
                 LDiv(
                     mapOf(
-                        "style" to "background-color:white;margin-bottom:5px;padding:5px;",
+                        "style" to "margin-bottom:5px;padding:5px;border: 1px solid black;",
                         "hx-get" to "${RecipeController.EDIT_PATH}/${recipe.id}",
                         "hx-swap" to "innerHTML",
                         "hx-target" to "#main-content"

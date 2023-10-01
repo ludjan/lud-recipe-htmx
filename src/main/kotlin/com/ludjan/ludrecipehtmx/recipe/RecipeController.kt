@@ -18,14 +18,14 @@ class RecipeController(
             LHtml(
                 LHead(LScript("https://unpkg.com/htmx.org@1.9.6")),
                 LBody(
-                    RecipeComponents1.addForm()
+                    RecipeComponents.addForm()
                 )
             ).render()
         )
 
     @GetMapping("/form")
     fun getAddForm() =
-        ResponseEntity.ok(RecipeComponents1.addForm().render())
+        ResponseEntity.ok(RecipeComponents.addForm().render())
 
     @PostMapping(CREATE)
     fun createRecipe(
@@ -64,7 +64,7 @@ class RecipeController(
             .find { it.id == recipeId }
             ?.let { recipe: RecipeEntity ->
                 println("Found recipe which has name ${recipe.name}")
-                ResponseEntity.ok(RecipeComponents1.editForm(recipeId, recipe.name).render())
+                ResponseEntity.ok(RecipeComponents.editForm(recipeId, recipe.name).render())
             } ?: println("Something went wrong")
 
 
