@@ -65,6 +65,12 @@ class RecipeController(
                 ResponseEntity.ok(RecipeComponents.editForm(recipe).render())
             }
 
+    @GetMapping("add-row/{index}")
+    fun stepRow(@PathVariable("index") index: Int) {
+        ResponseEntity.ok(RecipeComponents.stepRow(index).render())
+    }
+
+
 
     companion object {
         private const val BASE = "/recipe"

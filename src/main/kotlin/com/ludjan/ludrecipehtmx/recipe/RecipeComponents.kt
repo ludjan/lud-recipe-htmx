@@ -80,9 +80,32 @@ object RecipeComponents {
                          }
                     ),
                     LDivRow(
+                        LButton(
+                            mapOf(
+                                "hx-get" to "/recipe/add-row/8",
+                                "hx-swap" to "beforebegin",
+
+                            ),
+                            LText("Add row"))
+                    ),
+                    LDivRow(
                         LButtonSubmit("Submit")
                     )
                 )
             )
         ).also { println ("Returning ${it.render()}") }
+
+    fun stepRow(index: Int, description: String? = "") =
+        LDivRow(
+            listOf(
+                LLabel(for_attribute = "step-${index+1}", content = "Step ${index + 1}"),
+                LText("<br/>"),
+                LInput(
+                    type = "text",
+                    name = "step-${index+1}",
+                    id = "step-${index+1}",
+                    value= description),
+                LText("<br/>"),
+            )
+        )
 }
