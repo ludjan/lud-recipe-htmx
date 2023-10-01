@@ -39,4 +39,20 @@ class RecipeRepository {
             }
         }
     }
+
+    fun updateRecipe(updateRecipeRequest: UpdateRecipeRequest): Unit {
+        recipes = recipes.map { recipe ->
+            if (recipe.id == updateRecipeRequest.id) {
+                RecipeEntity(
+                    updateRecipeRequest.id,
+                    updateRecipeRequest.name,
+                    updateRecipeRequest.steps.map {
+                        Step(it)
+                    }
+                )
+            } else {
+                recipe
+            }
+        }
+    }
 }

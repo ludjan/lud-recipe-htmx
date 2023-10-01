@@ -13,7 +13,7 @@ class RecipeService(
     fun nextAvailableId(): Int =
         recipeRepository.getRecipes().maxOf { it.id } + 1
 
-    fun updateRecipe(recipeId: Int, name: String): Unit {
-        recipeRepository.updateRecipe(recipeId, name)
+    fun updateRecipe(updateRecipeRequest: UpdateRecipeRequest): Unit {
+        recipeRepository.updateRecipe(updateRecipeRequest)
     }
 }

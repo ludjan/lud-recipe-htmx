@@ -41,9 +41,9 @@ class RootController(
         listOf(
             LDiv(
                 mapOf(
-                    "style" to "text-align:center"
+                    "style" to "text-align:center;margin-bottom:20px;"
                 ),
-                LText("<h1>Recipe app</h1>")
+                LText("<h1>Recipes</h1>")
             )
         )
 

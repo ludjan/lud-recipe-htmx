@@ -46,13 +46,12 @@ class RecipeController(
         @PathVariable("recipeId") recipeId: Int,
         @RequestBody requestBody: MultiValueMap<String, String>,
     ): ResponseEntity<*> {
-        val name: String = requestBody["name"]?.first() ?: "horse"
-
-        name?.let {
-            println("About to update name for $recipeId to $name")
-            recipeService.updateRecipe(recipeId, it)
-        }
-
+        UpdateRecipeRequest
+            .fromIdAndMultiValueMap(recipeId, requestBody)
+            .let {
+                println("About to update name for $recipeId to $it")
+                recipeService.updateRecipe(it)
+            }
         return ResponseEntity.ok(LDiv(rendererService.recipeSection()).render())
     }
 
