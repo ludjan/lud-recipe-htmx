@@ -56,10 +56,11 @@ class RendererService (
                     listOf(
                         LDiv(LText("Name: ${recipe.name}")),
                         LDiv(LText("Id: ${recipe.id}")),
-                        LDiv(null,
-                            recipe.steps.map { step ->
-                                LDiv(null, LText("Step: ${step.description}"))
-                            }
+                        LDiv(recipe
+                                .steps
+                                .mapIndexed { index, step ->
+                                    LDiv(LText("Step ${index + 1}: ${step.description}"))
+                                }
                         ),
                     )
                 )

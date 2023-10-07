@@ -58,23 +58,26 @@ class RecipeController(
     @GetMapping("$EDIT/{recipeId}")
     fun getPopulatedRecipeForm(
         @PathVariable("recipeId") recipeId: Int
-    ) = recipeService.getRecipes()
-            .find { it.id == recipeId }
-            ?.let { recipe: RecipeEntity ->
-                println("Found recipe which has name ${recipe.name}")
-                ResponseEntity.ok(RecipeComponents.editForm(recipe).render())
-            }
+    ) = recipeService
+        .getRecipes()
+        .find { it.id == recipeId }
+        ?.let { recipe ->
+            RecipeComponents
+                .editForm(recipe)
+                .render()
+                .let {
+                    ResponseEntity.ok(it)
+                }
+        }
 
     @GetMapping("add-row/{index}")
     fun stepRow(@PathVariable("index") index: Int) =
         RecipeComponents
-            .stepRow(index)
+            .indexRowAndAddButton(index)
             .render()
             .let {
                 ResponseEntity.ok(it)
             }
-
-
 
 
     companion object {

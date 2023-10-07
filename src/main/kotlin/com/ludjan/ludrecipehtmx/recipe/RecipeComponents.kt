@@ -1,6 +1,7 @@
 package com.ludjan.ludrecipehtmx.recipe
 
 import com.ludjan.ludrecipehtmx.html.*
+import java.util.*
 
 object RecipeComponents {
 
@@ -57,17 +58,12 @@ object RecipeComponents {
                 ),
                 listOf(
                     LDivRow(
-                        listOf(
-                            LLabel(for_attribute = "name", content = "Name"),
-                            LText("<br/>"),
-                            LInput(type = "text", name = "name", id = "name", value= recipeEntity?.name ?: ""),
-                            LText("<br/>"),
-                        )
+                        formTextInput("name", recipeEntity?.name ?: "")
                     ),
                     LDivRow(
                         recipeEntity
                             ?.steps
-                            ?.mapIndexed { i, s -> row(i, s) }
+                            ?.mapIndexed { i, s -> rowForStep(i, s) }
                             ?.plus(buttonToAddRowWithIndex(recipeEntity.steps.size))
                             ?: firstRowAndAddButton()
                     ),
@@ -76,27 +72,45 @@ object RecipeComponents {
                     )
                 )
             )
-        ).also { println ("Returning ${it.render()}") }
+        ).also { println("Returning ${it.render()}") }
 
-    fun row(index: Int, step: Step?): LElement =
-        LDivRow(
-            listOf(
-                LLabel(for_attribute = "step-${index+1}", content = "Step ${index + 1}"),
-                LText("<br/>"),
-                LInput(
-                    type = "text",
-                    name = "step-${index+1}",
-                    id = "step-${index+1}",
-                    value= step?.description),
-                LText("<br/>"),
-            )
+    fun formTextInput(fieldName: String, value: String) =
+        listOf(
+            LLabel(for_attribute = fieldName, content = fieldName.capitalizeFirstLetter()),
+            LText("<br/>"),
+            LInput(type = "text", name = fieldName, id = fieldName, value = value),
+            LText("<br/>"),
         )
 
     fun firstRowAndAddButton(): List<LElement> =
         listOf(
-            row(0, null),
+            rowForStep(0, null),
             buttonToAddRowWithIndex(1)
-    )
+        )
+
+    fun indexRowAndAddButton(index: Int) =
+        LDiv(
+            listOf(
+                rowForStep(index, null)
+            ).plus(
+                buttonToAddRowWithIndex(index + 1)
+            )
+        )
+
+    fun rowForStep(index: Int, step: Step?): LElement =
+        LDivRow(
+            listOf(
+                LLabel(for_attribute = "step-${index + 1}", content = "Step ${index + 1}"),
+                LText("<br/>"),
+                LInput(
+                    type = "text",
+                    name = "step-${index + 1}",
+                    id = "step-${index + 1}",
+                    value = step?.description
+                ),
+                LText("<br/>"),
+            )
+        )
 
     fun buttonToAddRowWithIndex(index: Int): LElement =
         LButton(
@@ -109,31 +123,9 @@ object RecipeComponents {
             LText("Add row")
         )
 
-//    fun buttonToAddRowWithIndex(index: Int): List<LElement> =
-//        listOf(
-//            LButton(
-//                mapOf(
-//                    "id" to "add-row-button",
-//                    "hx-get" to "/recipe/add-row/$index",
-//                    "hx-swap" to "beforebegin",
-//                    "hx-target" to "#add-row-button"
-//                ),
-//                LText("Add row")
-//            )
-//        )
-
-
-    fun stepRow(index: Int, description: String? = "") =
-        LDivRow(
-            listOf(
-                LLabel(for_attribute = "step-${index+1}", content = "Step ${index + 1}"),
-                LText("<br/>"),
-                LInput(
-                    type = "text",
-                    name = "step-${index+1}",
-                    id = "step-${index+1}",
-                    value= description),
-                LText("<br/>"),
-            ).plus(buttonToAddRowWithIndex(index + 1))
-        )
+    fun String.capitalizeFirstLetter() =
+        this.replaceFirstChar {
+            if (it.isLowerCase()) it.titlecase(Locale.getDefault())
+            else it.toString()
+        }
 }
