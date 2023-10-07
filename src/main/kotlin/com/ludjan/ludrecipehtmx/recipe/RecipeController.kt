@@ -66,9 +66,14 @@ class RecipeController(
             }
 
     @GetMapping("add-row/{index}")
-    fun stepRow(@PathVariable("index") index: Int) {
-        ResponseEntity.ok(RecipeComponents.stepRow(index).render())
-    }
+    fun stepRow(@PathVariable("index") index: Int) =
+        RecipeComponents
+            .stepRow(index)
+            .render()
+            .let {
+                ResponseEntity.ok(it)
+            }
+
 
 
 

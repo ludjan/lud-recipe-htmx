@@ -1,4 +1,4 @@
-package com.example.demo
+package com.ludjan.ludrecipehtmx
 
 import com.ludjan.ludrecipehtmx.html.LDiv
 import com.ludjan.ludrecipehtmx.html.LText

@@ -53,6 +53,7 @@ object RecipeComponents {
                     "hx-params" to "*",
                     "hx-swap" to "innerHTML",
                     "hx-target" to "#main-content",
+                    "id" to "edit-form"
                 ),
                 listOf(
                     LDivRow(
@@ -64,29 +65,11 @@ object RecipeComponents {
                         )
                     ),
                     LDivRow(
-                        recipeEntity?.steps?.mapIndexed { index, step ->
-                            LDivRow(
-                                listOf(
-                                    LLabel(for_attribute = "step-${index+1}", content = "Step ${index + 1}"),
-                                    LText("<br/>"),
-                                    LInput(
-                                        type = "text",
-                                        name = "step-${index+1}",
-                                        id = "step-${index+1}",
-                                        value= step.description),
-                                    LText("<br/>"),
-                                )
-                            )
-                         }
-                    ),
-                    LDivRow(
-                        LButton(
-                            mapOf(
-                                "hx-get" to "/recipe/add-row/8",
-                                "hx-swap" to "beforebegin",
-
-                            ),
-                            LText("Add row"))
+                        recipeEntity
+                            ?.steps
+                            ?.mapIndexed { i, s -> row(i, s) }
+                            ?.plus(buttonToAddRowWithIndex(recipeEntity.steps.size))
+                            ?: firstRowAndAddButton()
                     ),
                     LDivRow(
                         LButtonSubmit("Submit")
@@ -94,6 +77,51 @@ object RecipeComponents {
                 )
             )
         ).also { println ("Returning ${it.render()}") }
+
+    fun row(index: Int, step: Step?): LElement =
+        LDivRow(
+            listOf(
+                LLabel(for_attribute = "step-${index+1}", content = "Step ${index + 1}"),
+                LText("<br/>"),
+                LInput(
+                    type = "text",
+                    name = "step-${index+1}",
+                    id = "step-${index+1}",
+                    value= step?.description),
+                LText("<br/>"),
+            )
+        )
+
+    fun firstRowAndAddButton(): List<LElement> =
+        listOf(
+            row(0, null),
+            buttonToAddRowWithIndex(1)
+    )
+
+    fun buttonToAddRowWithIndex(index: Int): LElement =
+        LButton(
+            mapOf(
+                "id" to "add-row-button",
+                "hx-get" to "/recipe/add-row/$index",
+                "hx-swap" to "outerHTML",
+                "hx-target" to "#add-row-button"
+            ),
+            LText("Add row")
+        )
+
+//    fun buttonToAddRowWithIndex(index: Int): List<LElement> =
+//        listOf(
+//            LButton(
+//                mapOf(
+//                    "id" to "add-row-button",
+//                    "hx-get" to "/recipe/add-row/$index",
+//                    "hx-swap" to "beforebegin",
+//                    "hx-target" to "#add-row-button"
+//                ),
+//                LText("Add row")
+//            )
+//        )
+
 
     fun stepRow(index: Int, description: String? = "") =
         LDivRow(
@@ -106,6 +134,6 @@ object RecipeComponents {
                     id = "step-${index+1}",
                     value= description),
                 LText("<br/>"),
-            )
+            ).plus(buttonToAddRowWithIndex(index + 1))
         )
 }
